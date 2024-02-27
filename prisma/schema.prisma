@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Rol_Usuario {
+  ADMIN
+  USER
+  CHOFER
+}
+
+enum Tipo_Reporte {
+  QUEJA
+  SUGERENCIA
+}
+
+enum Tipo_Horario {
+  AM
+  PM
+}
+
+model Usuario {
+  id        String      @id @default(uuid())
+  correo    String      @unique @db.VarChar(50)
+  nombre    String      @db.VarChar(20)
+  apellidos String      @db.VarChar(20)
+  password  String      @db.VarChar(100)
+  telefono  String      @unique @db.VarChar(10)
+  foto      String?     @db.VarChar(40)
+  estado    Boolean     @default(true)
+  rol       Rol_Usuario @default(USER)
+
+  ruta_guardada  RutaGuardada[]
+  vehiculo_fk    Vehiculo?
+  reporte_fk     Reporte[]
+  notificaion_fk Notificacion[]
+}
+
+model Ruta {
+  id              String   @id @default(uuid())
+  numero          Int      @unique @default(autoincrement())
+  destino         String   @db.VarChar(40)
+  origen          String   @db.VarChar(40)
+  estado          Boolean  @default(true)
+  longitudDestino Decimal?
+  latitudDestino  Decimal?
+  longitudOrigen  Decimal?
+  latitudOrigen   Decimal?
+
+  horarios       Horario[]
+  paradas        Parada[]
+  vehiculos      Vehiculo[]
+  ruta_Guardada  RutaGuardada[]
+  fk_notificaion Notificacion[]
+}
+
+model Horario {
+  id          String   @id @default(uuid())
+  dia_hora    DateTime
+  numero_ruta Int
+
+  id_ruta    String
+  ruta_id_fk Ruta   @relation(fields: [id_ruta], references: [id], onDelete: Cascade)
+}
+
+model Parada {
+  id           String @id @default(uuid())
+  nombre_calle String @db.VarChar(20)
+  numero_ruta  Int
+
+  longitud Decimal?
+  latitud  Decimal?
+
+  id_ruta    String
+  ruta_id_fk Ruta   @relation(fields: [id_ruta], references: [id], onDelete: Cascade)
+}
+
+model Vehiculo {
+  numero           Int     @id @default(autoincrement())
+  nombre_chofer    String  @db.VarChar(20)
+  apellidos_chofer String? @db.VarChar(20)
+  numero_ruta      Int
+
+  id_usuario String  @unique @db.VarChar(36)
+  usuario_fk Usuario @relation(fields: [id_usuario], references: [id])
+
+  id_ruta    String
+  ruta_id_fk Ruta   @relation(fields: [id_ruta], references: [id])
+}
+
+model RutaGuardada {
+  id String @id @default(uuid())
+
+  id_usuario String  @db.VarChar(36)
+  usuario_fk Usuario @relation(fields: [id_usuario], references: [id], onDelete: Cascade)
+
+  id_ruta String @unique @db.VarChar(36)
+  ruta_fk Ruta   @relation(fields: [id_ruta], references: [id], onDelete: Cascade)
+}
+
+model Reporte {
+  id          String       @id @default(uuid())
+  tipo        Tipo_Reporte
+  fecha       DateTime
+  descripcion String       @db.VarChar(200)
+
+  id_usuario String  @db.VarChar(36)
+  usuario_fk Usuario @relation(fields: [id_usuario], references: [id])
+}
+
+model Notificacion {
+  id      String       @id @default(uuid())
+  hora    Int
+  minuto  Int
+  horario Tipo_Horario
+
+  id_usuario String  @db.VarChar(36)
+  fk_usuario Usuario @relation(fields: [id_usuario], references: [id], onDelete: Cascade)
+
+  id_ruta String @db.VarChar(36)
+  fk_ruta Ruta   @relation(fields: [id_ruta], references: [id], onDelete: Cascade)
+}

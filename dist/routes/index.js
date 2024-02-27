@@ -1,0 +1,28 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.notificaionesRoutes = exports.vehiculosRoutes = exports.uploadsRoutes = exports.usuarioRoutes = exports.paradasRoutes = exports.rutasRoutes = exports.rutasGuardadasRoutes = exports.reportesRoutes = exports.horariosRoutes = exports.busquedasRoutes = exports.authRoutes = void 0;
+const horarios_1 = __importDefault(require("./horarios"));
+exports.horariosRoutes = horarios_1.default;
+const auth_1 = __importDefault(require("./auth"));
+exports.authRoutes = auth_1.default;
+const busquedas_1 = __importDefault(require("./busquedas"));
+exports.busquedasRoutes = busquedas_1.default;
+const rutas_1 = __importDefault(require("./rutas"));
+exports.rutasRoutes = rutas_1.default;
+const rutasGuardadas_1 = __importDefault(require("./rutasGuardadas"));
+exports.rutasGuardadasRoutes = rutasGuardadas_1.default;
+const paradas_1 = __importDefault(require("./paradas"));
+exports.paradasRoutes = paradas_1.default;
+const usuarios_1 = __importDefault(require("./usuarios"));
+exports.usuarioRoutes = usuarios_1.default;
+const uploads_1 = __importDefault(require("./uploads"));
+exports.uploadsRoutes = uploads_1.default;
+const vehiculos_1 = __importDefault(require("./vehiculos"));
+exports.vehiculosRoutes = vehiculos_1.default;
+const reportes_1 = __importDefault(require("./reportes"));
+exports.reportesRoutes = reportes_1.default;
+const notifcaiones_1 = __importDefault(require("./notifcaiones"));
+exports.notificaionesRoutes = notifcaiones_1.default;
